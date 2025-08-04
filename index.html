@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Orçamento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f7f7f7;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label, select, input {
+      display: block;
+      margin: 1rem 0 .5rem;
+      width: 100%;
+    }
+    input[type="checkbox"] {
+      display: inline-block;
+      width: auto;
+    }
+    .resultado {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Simulador de Orçamento</h2>
+  <label for="peca">Tipo de Peça:</label>
+  <select id="peca">
+    <option value="macacao">Macacão (R$ 45)</option>
+    <option value="body">Body (R$ 30)</option>
+    <option value="vestido">Vestido (R$ 55)</option>
+  </select>
+
+  <label for="tecido">Tipo de Tecido:</label>
+  <select id="tecido">
+    <option value="cotton">Cotton (R$ 0)</option>
+    <option value="suedine">Suedine (R$ 3)</option>
+    <option value="ribana">Ribana (R$ 2)</option>
+  </select>
+
+  <label>Diferenciais Adicionais:</label>
+  <label><input type="checkbox" value="bordado" /> Bordado (R$ 5)</label>
+  <label><input type="checkbox" value="forro" /> Forro especial (R$ 7)</label>
+  <label><input type="checkbox" value="botoes" /> Botões forrados (R$ 4)</label>
+
+  <div class="resultado">Total: R$ <span id="total">0,00</span></div>
+
+  <script>
+    const precosPecas = {
+      macacao: 45,
+      body: 30,
+      vestido: 55
+    };
+
+    const precosTecidos = {
+      cotton: 0,
+      suedine: 3,
+      ribana: 2
+    };
+
+    const precosAdicionais = {
+      bordado: 5,
+      forro: 7,
+      botoes: 4
+    };
+
+    const peca = document.getElementById('peca');
+    const tecido = document.getElementById('tecido');
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const totalSpan = document.getElementById('total');
+
+    function calcularTotal() {
+      let total = 0;
+      total += precosPecas[peca.value];
+      total += precosTecidos[tecido.value];
+
+      checkboxes.forEach(cb => {
+        if (cb.checked) total += precosAdicionais[cb.value];
+      });
+
+      totalSpan.textContent = total.toFixed(2).replace('.', ',');
+    }
+
+    peca.addEventListener('change', calcularTotal);
+    tecido.addEventListener('change', calcularTotal);
+    checkboxes.forEach(cb => cb.addEventListener('change', calcularTotal));
+
+    calcularTotal(); // inicial
+  </script>
+</body>
+</html>
